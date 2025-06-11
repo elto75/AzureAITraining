@@ -78,7 +78,7 @@ def get_openai_response(messages):
         return answer
 
 
-input_question = st.chat_input("Enter your question:")
+input_question = st.chat_input("질문을 입력하세요:")
 
 if input_question:
     st.session_state.messages.append({"role": "user", "content": input_question})
