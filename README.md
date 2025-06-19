@@ -1,5 +1,70 @@
 # Data Gather agent
 
+1. 보안 문제로 업로드 되지 않는 파일
+.env
+````
+OPENAI_ENDPOINT=https://dalhyun-openai-mvp-200.openai.azure.com/
+OPENAI_API_KEY=...
+CHAT_MODEL=gpt-4o-mini
+CHAT_MODEL_DEPLOYMENT_NAME=mvp-gpt-4o-mini
+EMBEDDING_MODEL=text-embedding-ada-002
+EMBEDDING_DEPLOYMENT_NAME=mvp-text-embedding-ada-002
+SEARCH_ENDPOINT=https://dalhyun-ai-search-mvp-200.search.windows.net
+SEARCH_API_KEY=...
+INDEX_NAME=ktmembership
+````
+env_event_index
+````
+; PROJECT_ENDPOINT="https://dalhyun-fine-project-resource.services.ai.azure.com/api/projects/dalhyun-fine-project"
+MODEL_DEPLOYMENT_NAME="mvp-gpt-4o-mini"
+EVENT_LIST_URL="https://event.kt.com/html/event/ongoing_event_list.html"
+
+AZURE_VISION_ENDPOINT=https://westus.api.cognitive.microsoft.com/
+AZURE_VISION_API_KEY=...
+# Vision API endpoint and key for image processing
+
+; AZURE_SEARCH_SERVICE_ENDPOINT=https://dalhyun-ai-search-mvp.search.windows.net
+; AZURE_SEARCH_SERVICE_INDEX_NAME=event_index
+; AZURE_SEARCH_SERVICE_API_KEY=...
+
+; AZURE_STORAGE_ACCOUNT_ENDPOINT=...
+; AZURE_STORAGE_ACCOUNT_API_KEY=...
+; AZURE_STORAGE_ACCOUNT_NAME=dalhyunstorageaccount001
+
+PAGE_TYPE="event"
+
+MAX_PAGE_NO=2
+
+FILE_DIR=data/event_files
+
+LIST_CONTAINER_NAME=event-list
+````
+env_faq_index
+````
+; PROJECT_ENDPOINT="https://dalhyun-fine-project-resource.services.ai.azure.com/api/projects/dalhyun-fine-project"
+MODEL_DEPLOYMENT_NAME="mvp-gpt-4o-mini"
+EVENT_LIST_URL="https://ermsweb.kt.com/pc/faq/faqList.do"
+
+AZURE_VISION_ENDPOINT=https://dalhyun-ai-service-mvp.cognitiveservices.azure.com/
+AZURE_VISION_API_KEY=
+# Vision API endpoint and key for image processing
+
+; AZURE_SEARCH_SERVICE_ENDPOINT=https://dalhyun-ai-search-mvp.search.windows.net
+; AZURE_SEARCH_SERVICE_INDEX_NAME=event_index
+; AZURE_SEARCH_SAZURE_VISION_ENDPOINT=https://westus.api.cognitive.microsoft.com/
+; AZURE_STORAGE_ACCOUNT_ENDPOINT=
+; AZURE_STORAGE_ACCOUNT_API_KEY=...
+; AZURE_STORAGE_ACCOUNT_NAME=dalhyunstorageaccount001
+
+
+PAGE_TYPE="faq"
+
+MAX_PAGE_NO=1
+
+FILE_DIR=data/faq_files
+LIST_CONTAINER_NAME=tab-items
+````
+
 1. 설치 필요한 패키지 - uv 또는 pip를 이용하여 설치 uv add dotenv or pip install dotenv 형태
    - azure-ai-agents
    - azure-identity
