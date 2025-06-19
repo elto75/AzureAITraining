@@ -1,26 +1,68 @@
-# AzureAITraining
+# Data Gather agent
 
-1. 프로젝트 개요
-   1. 문제정의
-      - 최근 웹 사이트 이벤트 내용을 AI  챗봇화 하는데 시간 소요가 많음
-   1. 대상사용자
-      - 웹 사이트 이벤트 관리자 및 개발자
-   1. 솔루션 개요
-      - 애저 인공지능 기술을 활용한 이벤트 챗봇
-         - 챗봇 연결 시 이벤트 당첨 툴을 이용한 당첨 여부 확인
-         - 기존 이벤트 참여 정보를 바탕으로 이벤트 추천
-         - 이벤트에 대한 검색(RAG)
-1. 아키텍처 다이어그램
-   1. 이벤트 페이지 정보 수집 및 이미지 -> 텍스트 변환 및 임베딩
-   1. 기존 API 호출 툴 작성하여 이벤트 당첨여부 등 사용자 정보 연계
-1. 핵심 기술 포인트
-   1. 동적 페이지 크롤링
-   1. Azure AI Search
-   1. Langgraph
-   1. Tools
-1. 라이브 데모
-   1. 데모 주소 : 
-1. 향후 개선 및 확장 계획
-   1. 크롤링 자동화 방안
-   1. 이미지 문서 처리 검증 방안
-      - 요약 구체화 기술을 이용하여 Image -> Text 변환된 문서의 오류율 검증 방안 확인
+1. 설치 필요한 패키지 - uv 또는 pip를 이용하여 설치 uv add dotenv or pip install dotenv 형태
+   - azure-ai-agents
+   - azure-identity
+   - azure-search-documents
+   - beautifulsoup4
+   - chromedriver-autoinstaller
+   - dotenv
+   - selenium
+   - webdriver-manager
+   - azure-ai-vision-imageanalysis
+   - azure-storage-blob
+   - langgraph
+
+1. Azure Resource 삭제
+az group delete --name dalhyun-rg
+az search service delete --name dalhyun-search-mvp-001 --resource-group dalhyun-rg
+az cognitiveservices account deployment delete --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg --deployment-name mvp-gpt4o-mini
+az cognitiveservices account deployment delete --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg --deployment-name mvp-text-embedding-3-small 
+az storage account delete --name dalhyunstorageaccount001 --resource-group dalhyun-rg --location westus --sku Standard_LRS --kind StorageV2
+az cognitiveservices account delete --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg
+az cognitiveservices account purge --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg --location westus
+az cognitiveservices account create --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg --location westus --kind OpenAI --sku s0
+az cognitiveservices account deployment create --name dalhyun-openai-mvp-004 --resource-group dalhyun-rg --deployment-name mvp-gpt4o-mini --model-name gpt-4o-mini --model-version 2024-07-18 --model-format OpenAI --sku-capacity 1 --sku-name GlobalStandard
+az cognitiveservices account deployment create --name dalhyun-openai-mvp-004 --resource-group dalhyun-rg --deployment-name mvp-text-embedding-3-small --model-name text-embedding-3-small --model-version 1 --model-format OpenAI --sku-capacity 1 --sku-name GlobalStandard
+
+az storage account create --name dalhyunstorageaccount001 --resource-group dalhyun-rg --location westus --sku Standard_LRS --kind StorageV2
+az cognitiveservices account purge --name dalhyun-ai-service-mvp-001 --resource-group dalhyun-mvp --location westus
+
+1. Azure Resource 생성
+````
+az group create --name dalhyun-rg --location westus
+az search service create --name dalhyun-search-mvp-001 --location westus --resource-group dalhyun-rg --sku Basic --partition-count 1 --replica-count 1
+az cognitiveservices account create --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg --location westus --kind OpenAI --sku s0
+az cognitiveservices account deployment create --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg --deployment-name mvp-gpt4o-mini --model-name gpt-4o-mini --model-version 2024-07-18 --model-format OpenAI --sku-capacity 1 --sku-name GlobalStandard
+az cognitiveservices account deployment create --name dalhyun-openai-mvp-001 --resource-group dalhyun-rg --deployment-name mvp-text-embedding-3-small --model-name text-embedding-3-small --model-version 1 --model-format OpenAI --sku-capacity 1 --sku-name GlobalStandard
+az storage account create --name dalhyunstorageaccount001 --resource-group dalhyun-rg --location westus --sku Standard_LRS --kind StorageV2
+az cognitiveservices account create --name dalhyun-ai-service-mvp-001 --resource-group dalhyun-mvp --sku s0 --location westus --kind CognitiveServices
+
+
+````
+1. data-gather-agent.py 실행하여 rag 자료 생성
+````
+# 실행전 env_event_index파일과 env_faq_index파일의 환경 변수 설정필요
+# 크롬 브라우저 설치되어 있어야 함
+# uv 사용시
+uv run python data-gather-agent.py env_event_index
+uv run python data-gather-agent.py env_faq_index
+# python 직접 사용시
+python data-gather-agent.py env_event_index
+python data-gather-agent.py env_faq_index
+````
+data 폴더에 event_files, faq_files에 파일 생성 확인
+단 기존의 파일이 있으면 생성하지 않고 건너 뜀
+삭제하고 실행시 다운받아서 폴드에 저장됨(실행전 폴더는 생성해 두어야 함, 실행전 크롬 설치되어 있어야 함)
+
+
+1. Data file Upload
+   SDK를 이용하여 업로드 하려고 하였으나 SDK에서 제공하는 인증 방식이 권한이 없는 방식이라 진행하지 못함
+   uploadDocs.bat에 스토리지 키를 설정하고 cmd 창에서 실행
+   ## 원인 파악중이지만 두번째 명령이 직접 실행되지 않아 기존 uploadDocs.bat파일 실행된 창에서 마지막 명령어 수동 실행 필요
+1. Azure AI Search 생성
+   스크립트가 자동 생성되지 않아 portal에서 생성
+   ragdatas 컨테이너의 서브 폴더 event_files를 kt-membership-event 인덱스로, faq_files를 kt-membership-faq 인덱스로 생성(벡터 DB  적용)
+
+1. https://dalhyun-chatbot-effgbubhhgabetgk.westus-01.azurewebsites.net/ 웹앱에서 동작 확인
+

@@ -5,8 +5,19 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "azure-ai-agents>=1.0.1",
+    "azure-ai-vision-imageanalysis>=1.0.0",
+    "azure-identity>=1.23.0",
+    "azure-search>=1.0.0b2",
+    "azure-search-documents>=11.5.2",
+    "azure-storage-blob>=12.25.1",
     "azureopenai>=0.0.1",
+    "beautifulsoup4>=4.13.4",
+    "chromedriver-autoinstaller>=0.6.4",
     "dotenv>=0.9.9",
+    "langgraph>=0.4.8",
     "openai>=1.86.0",
+    "selenium>=4.33.0",
     "streamlit>=1.45.1",
+    "webdriver-manager>=4.0.2",
 ]
