@@ -133,3 +133,7 @@ data 폴더에 event_files, faq_files에 파일 생성 확인
 
 1. https://dalhyun-chatbot-effgbubhhgabetgk.westus-01.azurewebsites.net/ 웹앱에서 동작 확인
 
+1. Sample
+   자동차 관련 이벤트를 알려줘
+   인터넷 장애는 어떻게 신고해야 해?
+   인터넷 품질을 개선 시키는 방법을 알려줘
