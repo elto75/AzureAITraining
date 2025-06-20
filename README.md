@@ -1,6 +1,8 @@
 # Data Gather agent
 
 1. 보안 문제로 업로드 되지 않는 파일
+
+
 .env
 ````
 OPENAI_ENDPOINT=https://dalhyun-openai-mvp-200.openai.azure.com/
